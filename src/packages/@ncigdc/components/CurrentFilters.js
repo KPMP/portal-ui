@@ -31,6 +31,7 @@ import GeneSymbol from '@ncigdc/modern_components/GeneSymbol';
 import SetId from '@ncigdc/components/SetId';
 import { parseJSONParam } from '@ncigdc/utils/uri/index';
 import { AWG } from '@ncigdc/utils/constants';
+import features from '../../../features.json';
 
 /*----------------------------------------------------------------------------*/
 
@@ -295,7 +296,7 @@ const CurrentFilters = (
         </Row>
       </Row>
     )}
-    {!AWG &&
+    {!AWG && features.advancedSearch &&
       linkPathname &&
       (!hideLinkOnEmpty || !!currentFilters.length) && (
         <LinkButton
