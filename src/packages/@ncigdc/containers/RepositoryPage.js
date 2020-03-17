@@ -20,6 +20,7 @@ import RepoCasesPies from '@ncigdc/components/TabPieCharts/RepoCasesPies';
 import RepoFilesPies from '@ncigdc/components/TabPieCharts/RepoFilesPies';
 import withRouter from '@ncigdc/utils/withRouter';
 import ActionsRow from '@ncigdc/components/ActionsRow';
+import features from '../../../features';
 
 export type TProps = {
   push: Function,
@@ -80,9 +81,27 @@ const enhance = compose(
 );
 
 export const RepositoryPageComponent = (props: TProps) => {
-  const fileCount = props.viewer.repository.files.hits.total;
-  const caseCount = props.viewer.repository.cases.hits.total;
-  const fileSize = props.viewer.cart_summary.aggregations.fs.value;
+  const fileCount = props.viewer.File.hits.total;
+//  const caseCount = props.viewer.repository.cases.hits.total;
+//  const fileSize = props.viewer.cart_summary.aggregations.fs.value;
+  
+  // hacking this in to get things to work
+  const caseCount = 0;
+  const fileSize = 0;
+  const facetTabs=[
+        {
+          id: 'files',
+          text: 'Files',
+          component: <FileAggregations relay={props.relay} />,
+        }];
+  if (features.caseAggregations) {
+    facetTabs.push({
+      id: 'cases',
+      text: 'Cases',
+      component: <CaseAggregations relay={props.relay} />,
+    })
+  }
+
   return (
     <div className="test-repository-page">
       <SearchPage
@@ -91,18 +110,7 @@ export const RepositoryPageComponent = (props: TProps) => {
           linkPathname: '/query',
           linkText: 'Advanced Search',
         }}
-        facetTabs={[
-          {
-            id: 'files',
-            text: 'Files',
-            component: <FileAggregations relay={props.relay} />,
-          },
-          {
-            id: 'cases',
-            text: 'Cases',
-            component: <CaseAggregations relay={props.relay} />,
-          },
-        ]}
+        facetTabs={facetTabs}
         results={
           <span>
             <ActionsRow
@@ -114,23 +122,24 @@ export const RepositoryPageComponent = (props: TProps) => {
               queryParam="searchTableTab"
               defaultIndex={0}
               tabToolbar={
+                features.saveIcon && (
                 <Row spacing="2rem" style={{ alignItems: 'center' }}>
                   <span style={{ flex: 'none' }}>
                     <SaveIcon style={{ marginRight: 5 }} />{' '}
                     <strong>{formatFileSize(fileSize)}</strong>
                   </span>
-                </Row>
+                </Row>)
               }
               links={[
                 {
                   id: 'files',
                   text: `Files (${fileCount.toLocaleString()})`,
-                  component: !!props.viewer.repository.files.hits.total ? (
+                  component: !!props.viewer.File.hits.total ? (
                     <div>
                       <RepoFilesPies
-                        aggregations={props.viewer.repository.files.pies}
+                        aggregations={props.viewer.File.pies}
                       />
-                      <FilesTable />
+                      <FilesTable downloadable={false} />
                     </div>
                   ) : (
                     <NoResultsMessage>
@@ -138,22 +147,22 @@ export const RepositoryPageComponent = (props: TProps) => {
                     </NoResultsMessage>
                   ),
                 },
-                {
-                  id: 'cases',
-                  text: `Cases (${caseCount.toLocaleString()})`,
-                  component: !!props.viewer.repository.cases.hits.total ? (
-                    <div>
-                      <RepoCasesPies
-                        aggregations={props.viewer.repository.cases.pies}
-                      />
-                      <RepoCasesTable />
-                    </div>
-                  ) : (
-                    <NoResultsMessage>
-                      No results found using those filters.
-                    </NoResultsMessage>
-                  ),
-                },
+//                {
+//                  id: 'cases',
+//                  text: `Cases (${caseCount.toLocaleString()})`,
+//                  component: !!props.viewer.repository.cases.hits.total ? (
+//                    <div>
+//                      <RepoCasesPies
+//                        aggregations={props.viewer.repository.cases.pies}
+//                      />
+//                      <RepoCasesTable />
+//                    </div>
+//                  ) : (
+//                    <NoResultsMessage>
+//                      No results found using those filters.
+//                    </NoResultsMessage>
+//                  ),
+//                },
               ]}
             />
           </span>
@@ -176,24 +185,8 @@ export const RepositoryPageQuery = {
   fragments: {
     viewer: () => Relay.QL`
       fragment on Root {
-        cart_summary {
-          aggregations(filters: $filters) {
-            fs {
-              value
-            }
-          }
-        }
-        repository {
 
-          cases {
-            pies: aggregations(filters: $filters aggregations_filter_themselves: true) {
-              ${RepoCasesPies.getFragment('aggregations')}
-            }
-            hits(score: "annotations.annotation_id" first: $cases_size offset: $cases_offset, filters: $filters, sort: $cases_sort) {
-              total
-            }
-          }
-          files {
+          File {
 
             pies: aggregations(filters: $filters aggregations_filter_themselves: true) {
               ${RepoFilesPies.getFragment('aggregations')}
@@ -201,7 +194,6 @@ export const RepositoryPageQuery = {
             hits(first: $files_size offset: $files_offset, filters: $filters, sort: $files_sort) {
               total
             }
-          }
         }
       }
     `,

@@ -49,13 +49,10 @@ export default (Component: ReactClass<*>) =>
         Component={Component}
         query={graphql`
           query FileAggregations_relayQuery(
-            $filters: FiltersArgument
-            $repoFileCustomFacetFields: [String]!
+            $filters: JSON
           ) {
             viewer {
-              repository {
-                files {
-                  facets(facets: $repoFileCustomFacetFields, filters: $filters)
+                File {
                   aggregations(
                     filters: $filters
                     aggregations_filter_themselves: false
@@ -78,19 +75,7 @@ export default (Component: ReactClass<*>) =>
                         key
                       }
                     }
-                    analysis__workflow_type {
-                      buckets {
-                        doc_count
-                        key
-                      }
-                    }
                     data_format {
-                      buckets {
-                        doc_count
-                        key
-                      }
-                    }
-                    platform {
                       buckets {
                         doc_count
                         key
@@ -102,8 +87,19 @@ export default (Component: ReactClass<*>) =>
                         key
                       }
                     }
+                    sample_id {
+                      buckets {
+                        doc_count
+                        key
+                      }
+                    }
+                    platform {
+                      buckets {
+                        doc_count
+                        key
+                      }
+                    }
                   }
-                }
               }
             }
           }

@@ -28,11 +28,15 @@ import consoleDebug from '@ncigdc/utils/consoleDebug';
 import { fetchNotifications } from '@ncigdc/dux/bannerNotification';
 import Loader from '@ncigdc/uikit/Loaders/Loader';
 import Portal from './Portal';
+import ReactGA from 'react-ga';
 
 // if (process.env.NODE_ENV !== 'production') {
 //   const { whyDidYouUpdate } = require('why-did-you-update');
 //   whyDidYouUpdate(React);
 // }
+
+ReactGA.initialize('UA-124331187-10');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const retryStatusCodes = [
   500,
@@ -207,11 +211,11 @@ const Root = (rootProps: mixed) => (
                 />
             </Switch>
           ) : (
-            <Relay.Renderer
-              Container={Portal}
-              environment={Relay.Store}
-              queryConfig={new RelayRoute(rootProps)}
-              />
+        		  <Relay.Renderer
+        		  	Container={Portal}
+        		  	environment={Relay.Store}
+        		  	queryConfig={new RelayRoute(rootProps)}
+        		  />
           )}
         </React.Fragment>
       </Router>

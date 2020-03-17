@@ -43,11 +43,10 @@ export default (Component: ReactClass<*>) =>
             $files_size: Int
             $files_offset: Int
             $files_sort: [Sort]
-            $filters: FiltersArgument
+            $filters: JSON
           ) {
             viewer {
-              repository {
-                files {
+                File {
                   hits(
                     first: $files_size
                     offset: $files_offset
@@ -62,36 +61,16 @@ export default (Component: ReactClass<*>) =>
                         file_name
                         file_size
                         access
-                        state
-                        acl
                         data_category
                         data_format
-                        platform
                         data_type
                         experimental_strategy
-                        cases {
-                          hits(first: 1) {
-                            total
-                            edges {
-                              node {
-                                case_id
-                                project {
-                                  project_id
-                                }
-                              }
-                            }
-                          }
-                        }
-                        annotations {
-                          hits(first: 0) {
-                            total
-                          }
-                        }
+                        sample_id
+                        platform
                       }
                     }
                   }
                 }
-              }
             }
           }
         `}

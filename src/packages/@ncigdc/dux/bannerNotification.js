@@ -28,10 +28,13 @@ type TAction = {
 };
 export function fetchNotifications() {
   return async (dispatch: Function) => {
-    const res1 = await fetchApi('notifications', {
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const res2 = (await fetchApi('login-notifications', {})) || { data: [] };
+//    const res1 = await fetchApi('notifications', {
+//      headers: { 'Content-Type': 'application/json' },
+//    });
+//    const res2 = (await fetchApi('login-notifications', {})) || { data: [] };
+	  
+	let res1 = {data:[{"components":["PORTAL"],"dismissible":true,"id":1,"level":"WARNING","message":"PLEASE NOTE: All datasets currently available in this tool were generated from reference tissue samples. This tool is currently still in active development. Additional data releases are expected soon and the user interface will be evolving."}]};
+	let res2 = { data: [] };
     dispatch({
       type: NOTIFICATION_SUCCESS,
       payload: [...res1.data, ...res2.data],

@@ -9,6 +9,7 @@ import { RepositoryCasesLink } from '@ncigdc/components/Links/RepositoryLink';
 import FileLink from '@ncigdc/components/Links/FileLink';
 import { makeFilter } from '@ncigdc/utils/filters';
 import FileSize from '@ncigdc/components/FileSize';
+import features from '../../../../features';
 
 const filesTableModel = [
   {
@@ -17,12 +18,14 @@ const filesTableModel = [
     th: () => <Th>File UUID</Th>,
     td: ({ node }) => (
       <Td>
-        <FileLink
-          uuid={node.file_id}
-          style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}
-        >
-          {node.file_id}
-        </FileLink>
+        {features.fileLinking ? (
+            <FileLink
+                uuid={node.file_id}
+                style={{whiteSpace: 'pre-line', wordBreak: 'break-all'}}
+            >
+              {node.file_id}
+            </FileLink>) : (node.file_id)
+        }
       </Td>
     ),
     sortable: true,
@@ -57,62 +60,65 @@ const filesTableModel = [
     th: () => <Th>File Name</Th>,
     td: ({ node }) => (
       <Td>
-        <FileLink
-          uuid={node.file_id}
-          style={{ whiteSpace: 'pre-line', wordBreak: 'break-all' }}
-        >
-          {node.file_name}
-        </FileLink>
+        {features.fileLinking ? (
+            <FileLink
+                uuid={node.file_id}
+                style={{whiteSpace: 'pre-line', wordBreak: 'break-all'}}
+            >
+              {node.file_name}
+            </FileLink>
+        ) : (node.file_name)
+        }
       </Td>
     ),
   },
-  {
-    name: 'Cases',
-    id: 'cases.case_id',
-    th: () => <ThNum>Cases</ThNum>,
-    td: ({
-      node: { cases: { hits: { total = 0, edges: cases } }, file_id: fileId },
-    }) => (
-      <TdNum>
-        {total > 1 && (
-          <RepositoryCasesLink
-            query={{
-              filters: makeFilter(
-                [{ field: 'files.file_id', value: [fileId] }],
-                false,
-              ),
-            }}
-          >
-            {total.toLocaleString()}
-          </RepositoryCasesLink>
-        )}
-        {total === 1 && (
-          <CaseLink uuid={cases[0].node.case_id}>{total}</CaseLink>
-        )}
-
-        {total === 0 && 0}
-      </TdNum>
-    ),
-    downloadable: true,
-  },
-  {
-    name: 'Project',
-    id: 'cases.project.project_id',
-    th: () => <Th>Project</Th>,
-    td: ({ node }) => (
-      <Td>
-        {uniq(
-          node.cases.hits.edges.map(e => e.node.project.project_id),
-        ).map(pId => (
-          <ProjectLink key={pId} uuid={pId}>
-            {pId}
-          </ProjectLink>
-        ))}
-      </Td>
-    ),
-    sortable: true,
-    downloadable: true,
-  },
+//  {
+//    name: 'Cases',
+//    id: 'cases.case_id',
+//    th: () => <ThNum>Cases</ThNum>,
+//    td: ({
+//      node: { cases: { hits: { total = 0, edges: cases } }, file_id: fileId },
+//    }) => (
+//      <TdNum>
+//        {total > 1 && (
+//          <RepositoryCasesLink
+//            query={{
+//              filters: makeFilter(
+//                [{ field: 'files.file_id', value: [fileId] }],
+//                false,
+//              ),
+//            }}
+//          >
+//            {total.toLocaleString()}
+//          </RepositoryCasesLink>
+//        )}
+//        {total === 1 && (
+//          <CaseLink uuid={cases[0].node.case_id}>{total}</CaseLink>
+//        )}
+//
+//        {total === 0 && 0}
+//      </TdNum>
+//    ),
+//    downloadable: true,
+//  },
+//  {
+//    name: 'Project',
+//    id: 'cases.project.project_id',
+//    th: () => <Th>Project</Th>,
+//    td: ({ node }) => (
+//      <Td>
+//        {uniq(
+//          node.cases.hits.edges.map(e => e.node.project.project_id),
+//        ).map(pId => (
+//          <ProjectLink key={pId} uuid={pId}>
+//            {pId}
+//          </ProjectLink>
+//        ))}
+//      </Td>
+//    ),
+//    sortable: true,
+//    downloadable: true,
+//  },
   {
     name: 'Data Category',
     id: 'data_category',
@@ -141,26 +147,26 @@ const filesTableModel = [
     sortable: true,
     downloadable: true,
   },
-  {
-    name: 'Annotations',
-    id: 'annotations.annotation_id',
-    th: () => <ThNum>Annotations</ThNum>,
-    td: ({ node }) => (
-      <TdNum>
-        {
-          // leaving link off until we have a proper way to filter the annotation page by file
-          node.annotations.hits.total
-        }
-      </TdNum>
-    ),
-    downloadable: true,
-  },
+//  {
+//    name: 'Annotations',
+//    id: 'annotations.annotation_id',
+//    th: () => <ThNum>Annotations</ThNum>,
+//    td: ({ node }) => (
+//      <TdNum>
+//        {
+//          // leaving link off until we have a proper way to filter the annotation page by file
+//          node.annotations.hits.total
+//        }
+//      </TdNum>
+//    ),
+//    downloadable: true,
+//  },
   {
     name: 'Data Type',
     id: 'data_type',
     th: () => <Th>Data Type</Th>,
     td: ({ node }) => <Td>{node.data_type || '--'}</Td>,
-    sortable: false,
+    sortable: true,
     downloadable: true,
     hidden: true,
   },
@@ -169,18 +175,27 @@ const filesTableModel = [
     id: 'experimental_strategy',
     th: () => <Th>Experimental Strategy</Th>,
     td: ({ node }) => <Td>{node.experimental_strategy || '--'}</Td>,
-    sortable: false,
+    sortable: true,
     downloadable: true,
     hidden: true,
+  },
+  {
+	  name: 'Sample ID',
+	  id: 'sample_id',
+	  th: () => <Th>Sample ID</Th>,
+	  td: ({ node }) => <Td>{node.sample_id || '--'}</Td>,
+	  sortable: true,
+	  downloadable: true,
+	  hidden: false,
   },
   {
     name: 'Platform',
     id: 'platform',
     th: () => <Th>Platform</Th>,
     td: ({ node }) => <Td>{node.platform || '--'}</Td>,
-    sortable: false,
+    sortable: true,
     downloadable: true,
-    hidden: true,
+    hidden: false,
   },
 ];
 

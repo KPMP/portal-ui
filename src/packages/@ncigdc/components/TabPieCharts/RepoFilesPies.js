@@ -17,6 +17,7 @@ import {
   PieTitle,
   SelfFilteringPie,
 } from './';
+import features from '../../../../features.json';
 
 export type TProps = {
   push: Function,
@@ -55,6 +56,8 @@ const RepoFilesPiesComponent = ({
     <div className="test-repo-files-pies">
       <BottomBorderedBox>
         <WrappedRow style={{ maxWidth: `${width}px`, width: '100%' }}>
+          {features.pieCharts.primarySite && (
+              <React.Fragment>
           <ColumnCenter
             style={{ minWidth: `${pieColMinWidth}px` }}
             className="test-primary-site-pie"
@@ -73,6 +76,10 @@ const RepoFilesPiesComponent = ({
               width={125}
             />
           </ColumnCenter>
+              </React.Fragment>
+          )}
+          {features.pieCharts.project && (
+              <React.Fragment>
           <ColumnCenter
             style={{ minWidth: `${pieColMinWidth}px` }}
             className="test-project-pie"
@@ -94,6 +101,8 @@ const RepoFilesPiesComponent = ({
               width={125}
             />
           </ColumnCenter>
+              </React.Fragment>
+          )}
           <ColumnCenter
             style={{ minWidth: `${pieColMinWidth}px` }}
             className="test-data-category-pie"
@@ -101,7 +110,7 @@ const RepoFilesPiesComponent = ({
             <PieTitle>Data Category</PieTitle>
             <SelfFilteringPie
               buckets={_.get(aggregations, 'data_category.buckets')}
-              fieldName="files.data_category"
+              fieldName="data_category"
               docTypeSingular="file"
               currentFieldNames={currentFieldNames}
               currentFilters={currentFilters}
@@ -119,7 +128,7 @@ const RepoFilesPiesComponent = ({
             <PieTitle>Data Type</PieTitle>
             <SelfFilteringPie
               buckets={_.get(aggregations, 'data_type.buckets')}
-              fieldName="files.data_type"
+              fieldName="data_type"
               docTypeSingular="file"
               currentFieldNames={currentFieldNames}
               currentFilters={currentFilters}
@@ -137,7 +146,7 @@ const RepoFilesPiesComponent = ({
             <PieTitle>Data Format</PieTitle>
             <SelfFilteringPie
               buckets={_.get(aggregations, 'data_format.buckets')}
-              fieldName="files.data_format"
+              fieldName="data_format"
               docTypeSingular="file"
               currentFieldNames={currentFieldNames}
               currentFilters={currentFilters}
@@ -148,7 +157,7 @@ const RepoFilesPiesComponent = ({
               width={125}
             />
           </ColumnCenter>
-          {showingMore && [
+          {/*{showingMore && [*/}
             <ColumnCenter
               style={{ minWidth: `${pieColMinWidth}px` }}
               key="files.experimental_strategy"
@@ -157,7 +166,7 @@ const RepoFilesPiesComponent = ({
               <PieTitle>Experimental Strategy</PieTitle>
               <SelfFilteringPie
                 buckets={_.get(aggregations, 'experimental_strategy.buckets')}
-                fieldName="files.experimental_strategy"
+                fieldName="experimental_strategy"
                 docTypeSingular="file"
                 currentFieldNames={currentFieldNames}
                 currentFilters={currentFilters}
@@ -167,16 +176,18 @@ const RepoFilesPiesComponent = ({
                 height={125}
                 width={125}
               />
-            </ColumnCenter>,
+            </ColumnCenter>
             <ColumnCenter
               key="files.access"
               style={{ minWidth: `${pieColMinWidth}px` }}
               className="test-access-level"
             >
+              {features.pieCharts.accessLevel && (
+                  <React.Fragment>
               <PieTitle>Access Level</PieTitle>
               <SelfFilteringPie
                 buckets={_.get(aggregations, 'access.buckets')}
-                fieldName="files.access"
+                fieldName="access"
                 docTypeSingular="file"
                 currentFieldNames={currentFieldNames}
                 currentFilters={currentFilters}
@@ -186,15 +197,17 @@ const RepoFilesPiesComponent = ({
                 height={125}
                 width={125}
               />
-            </ColumnCenter>,
-          ]}
+                  </React.Fragment>
+              )}
+            </ColumnCenter>
+          {/*]}*/}
         </WrappedRow>
       </BottomBorderedBox>
-      <RowCenter style={{ marginTop: '-1.5rem' }}>
-        <ShowToggleBox onClick={() => setShowingMore(!showingMore)}>
-          Show {showingMore ? 'Less' : 'More'}
-        </ShowToggleBox>
-      </RowCenter>
+      {/*<RowCenter style={{ marginTop: '-1.5rem' }}>*/}
+      {/*  <ShowToggleBox onClick={() => setShowingMore(!showingMore)}>*/}
+      {/*    Show {showingMore ? 'Less' : 'More'}*/}
+      {/*  </ShowToggleBox>*/}
+      {/*</RowCenter>*/}
     </div>
   );
 };
@@ -203,18 +216,6 @@ export const RepoFilesPiesQuery = {
   fragments: {
     aggregations: () => Relay.QL`
       fragment on FileAggregations {
-        cases__project__project_id {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        cases__primary_site {
-          buckets {
-            doc_count
-            key
-          }
-        }
         data_category {
           buckets {
             doc_count

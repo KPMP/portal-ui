@@ -24,6 +24,7 @@ import ImageViewerLink from '@ncigdc/components/Links/ImageViewerLink';
 import { withTheme } from '@ncigdc/theme';
 import pluralize from '@ncigdc/utils/pluralize';
 import { AWG } from '@ncigdc/utils/constants';
+import features from '../../../features.json';
 
 const ImageViewerLinkAsButton = styled(ImageViewerLink, {
   marginLeft: '5px',
@@ -60,14 +61,18 @@ export default compose(
         }}
       >
         <Row spacing="0.2rem">
-          <Button
+            {features.addFilesToCart && (
+                <Button
             onClick={() => dispatch(fetchFilesAndAdd(filters, totalFiles))}
             leftIcon={<ShoppingCartIcon />}
           >
             Add All Files to Cart
           </Button>
-          <DownloadManifestButton fileCount={totalFiles} filters={filters} />
-          {!AWG ? (
+            )}
+            {features.downloadManifest && (
+                <DownloadManifestButton fileCount={totalFiles} filters={filters} />
+            )}
+          {!AWG && features.navTabs.tabs.exploration ? (
             filters ? (
               <CreateRepositoryCaseSetButton
                 filters={filters}
@@ -142,9 +147,11 @@ export default compose(
             </RepositorySlideCount>
           )}
         </Row>
-        <AnnotationsLink>
-          <i className="fa fa-edit" /> Browse Annotations
-        </AnnotationsLink>
+          {features.browseAnnotations && (
+              <AnnotationsLink>
+                  <i className="fa fa-edit" /> Browse Annotations
+              </AnnotationsLink>
+          )}
       </Row>
     );
   },

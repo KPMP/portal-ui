@@ -32,7 +32,7 @@ export default (Component) => (props) => {
         }),
         slideFilter: makeFilter([
           {
-            field: 'files.data_type',
+            field: 'data_type',
             value: ['Slide Image'],
           },
         ]),
@@ -40,8 +40,8 @@ export default (Component) => (props) => {
       Component={Component}
       query={graphql`
         query repositoryCaseSlides_relayQuery(
-          $filters: FiltersArgument
-          $slideFilter: FiltersArgument
+          $filters: JSON
+          $slideFilter: JSON
         ) {
           viewer {
             repository {

@@ -26,49 +26,50 @@ import { IBucket } from '@ncigdc/components/Aggregations/types';
 import { withTheme } from '@ncigdc/theme';
 import FileIcon from '@ncigdc/theme/icons/File';
 import { Row } from '@ncigdc/uikit/Flex';
+import features from '../../../../features';
 
 const presetFacets = [
   {
     title: 'File',
     field: 'file_id',
-    full: 'files.file_id',
+    full: 'file_id',
     type: 'keyword',
   },
   {
     field: 'data_category',
-    full: 'files.data_category',
+    full: 'data_category',
     type: 'keyword',
   },
   {
     field: 'data_type',
-    full: 'files.data_type',
+    full: 'data_type',
     type: 'keyword',
   },
   {
     field: 'experimental_strategy',
-    full: 'files.experimental_strategy',
-    type: 'keyword',
-  },
-  {
-    title: 'Workflow Type',
-    field: 'analysis.workflow_type',
-    full: 'files.analysis.workflow_type',
+    full: 'experimental_strategy',
     type: 'keyword',
   },
   {
     field: 'data_format',
-    full: 'files.data_format',
+    full: 'data_format',
     type: 'keyword',
   },
   {
     field: 'platform',
-    full: 'files.platform',
+    full: 'platform',
     type: 'keyword',
   },
   {
     field: 'access',
-    full: 'files.access',
+    full: 'access',
     type: 'keyword',
+  },
+  {
+    title: 'Sample ID',
+    field: 'sample_id',
+    full: 'sample_id',
+    type: 'terms',
   },
 ];
 
@@ -84,11 +85,11 @@ const enhance = compose(
     validFacetDocTypes: ['files'],
   }),
   withState('fileIdCollapsed', 'setFileIdCollapsed', false),
-  withPropsOnChange(['viewer'], ({ viewer }) => ({
-    parsedFacets: viewer.repository.files.facets
-      ? tryParseJSON(viewer.repository.files.facets, {})
-      : {},
-  })),
+//  withPropsOnChange(['viewer'], ({ viewer }) => ({
+//    parsedFacets: viewer.File.facets
+//      ? tryParseJSON(viewer.File.facets, {})
+//      : {},
+//  })),
 );
 
 const styles = {
@@ -111,7 +112,7 @@ export type TProps = {
     data_type: { buckets: [IBucket] },
     experimental_strategy: { buckets: [IBucket] },
     platform: { buckets: [IBucket] },
-    analysis__workflow_type: { buckets: [IBucket] },
+    sample_id: { buckets: [IBucket] },
   },
   theme: Object,
   suggestions: Array<Object>,
@@ -146,9 +147,10 @@ const FileAggregations = ({
   shouldShowFacetSelection,
   theme,
   userSelectedFacets,
-  viewer: { repository: { files: { aggregations } } },
+  viewer: {  File: { aggregations  } },
 }: TProps) => (
   <div className="test-file-aggregations">
+    {features.fileFilter && (
     <div
       className="text-right"
       style={{
@@ -172,6 +174,7 @@ const FileAggregations = ({
         Add a File Filter
       </a>
     </div>
+    )}
     <Modal
       isOpen={shouldShowFacetSelection}
       style={{
@@ -206,13 +209,15 @@ const FileAggregations = ({
         style={{ borderBottom: `1px solid ${theme.greyScale5}` }}
         />
     ))}
+    {features.filesearch && (
     <FacetHeader
       collapsed={fileIdCollapsed}
       description="Enter File UUID or name"
-      field="files.file_id"
+      field="file_id"
       setCollapsed={setFileIdCollapsed}
       title="File"
       />
+    )}
     <SuggestionFacet
       collapsed={fileIdCollapsed}
       doctype="files"
@@ -236,7 +241,7 @@ const FileAggregations = ({
       style={{ borderBottom: `1px solid ${theme.greyScale5}` }}
       title="File"
       />
-    {_.reject(presetFacets, { full: 'files.file_id' }).map(facet => (
+    {_.reject(presetFacets, { full: 'file_id' }).map(facet => (
       <FacetWrapper
         additionalProps={facet.additionalProps}
         aggregation={

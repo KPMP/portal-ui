@@ -31,23 +31,18 @@ import FileIcon from '@ncigdc/theme/icons/File';
 import { Row } from '@ncigdc/uikit/Flex';
 
 const presetFacets = [
-  { title: 'File', field: 'file_id', full: 'files.file_id', type: 'keyword' },
-  { field: 'data_category', full: 'files.data_category', type: 'keyword' },
-  { field: 'data_type', full: 'files.data_type', type: 'keyword' },
+  { title: 'File', field: 'file_id', full: 'file_id', type: 'keyword' },
+  { field: 'data_category', full: 'data_category', type: 'keyword' },
+  { field: 'data_type', full: 'data_type', type: 'keyword' },
   {
     field: 'experimental_strategy',
-    full: 'files.experimental_strategy',
+    full: 'experimental_strategy',
     type: 'keyword',
   },
-  {
-    title: 'Workflow Type',
-    field: 'analysis.workflow_type',
-    full: 'files.analysis.workflow_type',
-    type: 'keyword',
-  },
-  { field: 'data_format', full: 'files.data_format', type: 'keyword' },
-  { field: 'platform', full: 'files.platform', type: 'keyword' },
-  { field: 'access', full: 'files.access', type: 'keyword' },
+  { field: 'data_format', full: 'data_format', type: 'keyword' },
+  { field: 'platform', full: 'platform', type: 'keyword' },
+  { field: 'access', full: 'access', type: 'keyword' },
+  { field: 'sample_id', full: 'sample_id', type: 'keyword'}
 ];
 
 const presetFacetFields = presetFacets.map(x => x.field);
@@ -110,7 +105,7 @@ export type TProps = {
     data_type: { buckets: [IBucket] },
     experimental_strategy: { buckets: [IBucket] },
     platform: { buckets: [IBucket] },
-    analysis__workflow_type: { buckets: [IBucket] },
+    sample_id: { buckets: [IBucket] },
   },
   theme: Object,
   filters: Object,
@@ -185,7 +180,7 @@ export const FileAggregationsComponent = (props: TProps) => (
     ))}
     <FacetHeader
       title="File"
-      field="files.file_id"
+      field="file_id"
       collapsed={props.fileIdCollapsed}
       setCollapsed={props.setFileIdCollapsed}
       description="Enter File UUID or name"
@@ -210,7 +205,7 @@ export const FileAggregationsComponent = (props: TProps) => (
         </Row>
       )}
     />
-    {_.reject(presetFacets, { full: 'files.file_id' }).map(facet => (
+    {_.reject(presetFacets, { full: 'file_id' }).map(facet => (
       <FacetWrapper
         key={facet.full}
         facet={facet}
@@ -255,30 +250,35 @@ export const FileAggregationsQuery = {
             key
           }
         }
-        analysis__workflow_type {
-          buckets {
-            doc_count
-            key
-          }
-        }
+
         data_format {
           buckets {
             doc_count
             key
           }
         }
-        platform {
-          buckets {
-            doc_count
-            key
-          }
-        }
+
         access {
           buckets {
             doc_count
             key
           }
         }
+        
+        sample_id {
+        	buckets {
+        		doc_count
+        		key
+        	}
+        }
+        
+        platform {
+        	buckets {
+        		doc_count
+        		key
+        	}
+        }
+        		
       }
     `,
   },

@@ -28,7 +28,7 @@ export default (Component: ReactClass<*>) =>
           fileFilters: makeFilter([
             { field: 'cases.case_id', value: [caseId] },
             {
-              field: 'files.data_type',
+              field: 'data_type',
               value: ['Biospecimen Supplement', 'Slide Image'],
             },
           ]),
@@ -44,8 +44,8 @@ export default (Component: ReactClass<*>) =>
         Component={Component}
         query={graphql`
           query BiospecimenCard_relayQuery(
-            $filters: FiltersArgument
-            $fileFilters: FiltersArgument
+            $filters: JSON
+            $fileFilters: JSON
           ) {
             viewer {
               repository {
