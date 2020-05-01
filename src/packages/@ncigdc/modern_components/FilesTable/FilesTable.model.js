@@ -10,6 +10,7 @@ import FileLink from '@ncigdc/components/Links/FileLink';
 import { makeFilter } from '@ncigdc/utils/filters';
 import FileSize from '@ncigdc/components/FileSize';
 import features from '../../../../features';
+import CopyToClipboardButton from '@ncigdc/modern_components/CopyToClipboardButton/CopyToClipboardButton';
 
 const filesTableModel = [
   {
@@ -60,6 +61,7 @@ const filesTableModel = [
     th: () => <Th>File Name</Th>,
     td: ({ node }) => (
       <Td>
+        <CopyToClipboardButton text={node.file_name} />
         {features.fileLinking ? (
             <FileLink
                 uuid={node.file_id}
@@ -183,7 +185,7 @@ const filesTableModel = [
 	  name: 'Sample ID',
 	  id: 'sample_id',
 	  th: () => <Th>Sample ID</Th>,
-	  td: ({ node }) => <Td>{node.sample_id || '--'}</Td>,
+	  td: ({ node }) => <Td>{node.sample_id ? node.sample_id.join(", ") : '--'}</Td>,
 	  sortable: true,
 	  downloadable: true,
 	  hidden: false,
