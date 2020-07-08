@@ -41,7 +41,6 @@ export default (Component) => (props) => {
       query={graphql`
         query repositoryCaseSlides_relayQuery(
           $filters: JSON
-          $slideFilter: JSON
         ) {
           viewer {
             repository {
@@ -51,15 +50,7 @@ export default (Component) => (props) => {
                 # it's fine because mostly used for one case or disable if 0
                 hits(filters: $filters, first: 99) {
                   total
-                  edges {
-                    node {
-                      files {
-                        hits(filters: $slideFilter, first: 0) {
-                          total
-                        }
-                      }
-                    }
-                  }
+
                 }
               }
             }

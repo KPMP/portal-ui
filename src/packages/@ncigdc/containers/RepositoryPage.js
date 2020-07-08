@@ -81,12 +81,12 @@ const enhance = compose(
 );
 
 export const RepositoryPageComponent = (props: TProps) => {
+	console.log(props);
   const fileCount = props.viewer.File.hits.total;
-//  const caseCount = props.viewer.repository.cases.hits.total;
+  const caseCount = props.viewer.Case.hits.total;
 //  const fileSize = props.viewer.cart_summary.aggregations.fs.value;
   
   // hacking this in to get things to work
-  const caseCount = 1;
   const fileSize = 0;
   const facetTabs=[
     {
@@ -146,22 +146,20 @@ export const RepositoryPageComponent = (props: TProps) => {
                     </NoResultsMessage>
                   ),
                 },
-//                {
-//                  id: 'cases',
-//                  text: `Cases (${caseCount.toLocaleString()})`,
-//                  component: !!props.viewer.File.hits.total ? (
-//                    <div>
-//                      <RepoCasesPies
-//                        aggregations={props.viewer.File.pies}
-//                      />
-//                      <RepoCasesTable />
-//                    </div>
-//                  ) : (
-//                    <NoResultsMessage>
-//                      No results found using those filters.
-//                    </NoResultsMessage>
-//                  ),
-//                },
+                {
+                  id: 'cases',
+                  text: `Cases (${caseCount.toLocaleString()})`,
+                  component: !!props.viewer.Case.hits.total ? (
+                    <div>
+
+                      <RepoCasesTable />
+                    </div>
+                  ) : (
+                    <NoResultsMessage>
+                      No results found using those filters.
+                    </NoResultsMessage>
+                  ),
+                },
               ]}
             />
           </span>
@@ -194,6 +192,15 @@ export const RepositoryPageQuery = {
               total
             }
         }
+	    Case {
+	    
+	    	pies: aggregations(filters: $filters aggregations_filter_themselves: true) {
+	    	${RepoCasesPies.getFragment('aggregations')}
+	    	}	
+	    	hits(first: $files_size offset: $files_offset, filters: $filters, sort: $files_sort) {
+	    		total
+	    	}
+	    }
       }
     `,
   },

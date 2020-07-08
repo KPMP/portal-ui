@@ -44,11 +44,8 @@ export default (Component: ReactClass<*>) =>
                   hits(first: 1, filters: $filters) {
                     edges {
                       node {
-                        case_id
-                        files {
-                          hits(first: 0) {
-                            total
-                          }
+                        samples {
+                        	sample_id
                         }
                       }
                     }

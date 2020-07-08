@@ -44,13 +44,7 @@ export default (Component: ReactClass<*>) =>
                   edges {
                     node {
                       samples {
-                        hits(first: 1, filters: $filters) {
-                          edges {
-                            node {
-                              sample_type
-                            }
-                          }
-                        }
+                        sample_type
                       }
                     }
                   }

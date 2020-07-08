@@ -45,13 +45,10 @@ export default (Component: React.Class<*>) =>
             $cases_offset: Int
             $cases_sort: [Sort]
             $filters: JSON
-            $score: String
           ) {
             viewer {
-              repository {
-                cases {
+                Case {
                   hits(
-                    score: $score
                     first: $cases_size
                     offset: $cases_offset
                     sort: $cases_sort
@@ -60,55 +57,16 @@ export default (Component: React.Class<*>) =>
                     total
                     edges {
                       node {
-                        id
-                        case_id
-                        primary_site
-                        disease_type
-                        submitter_id
-                        project {
-                          project_id
-                          program {
-                            name
-                          }
+                        samples {
+                        	sample_id
                         }
-                        annotations {
-                          hits(first: 1) {
-                            total
-                            edges {
-                              node {
-                                annotation_id
-                              }
-                            }
-                          }
-                        }
-                        demographic {
-                          gender
-                          ethnicity
-                          race
-                          days_to_death
-                          vital_status
-                        }
-                        diagnoses {
-                          hits(first: 99) {
-                            edges {
-                              node {
-                                primary_diagnosis
-                                age_at_diagnosis
-                              }
-                            }
-                          }
-                        }
-                        summary {
-                          data_categories {
-                            file_count
-                            data_category
-                          }
-                          file_count
+                        demographics {
+                          sex
+                          age
                         }
                       }
                     }
                   }
-                }
               }
             }
           }

@@ -115,49 +115,7 @@ export const RepoCasesPiesQuery = {
   fragments: {
     aggregations: () => Relay.QL`
       fragment on CaseAggregations {
-        demographic__ethnicity {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        demographic__gender {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        demographic__race {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        demographic__vital_status {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        disease_type {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        primary_site {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        project__project_id {
-          buckets {
-            doc_count
-            key
-          }
-        }
-        project__program__name {
+        demographics__sex {
           buckets {
             doc_count
             key

@@ -21,7 +21,7 @@ export default (Component: ReactClass<*>) =>
         variables: {
           filters: makeFilter([
             {
-              field: 'cases.case_id',
+              field: 'cases.sample.sample_id',
               value: [caseId],
             },
           ]),
@@ -43,9 +43,8 @@ export default (Component: ReactClass<*>) =>
                   hits(filters: $filters, first: 1) {
                     edges {
                       node {
-                        submitter_id
-                        project {
-                          project_id
+                        samples {
+                          sample_id
                         }
                       }
                     }

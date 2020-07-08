@@ -67,20 +67,7 @@ export default (Component: ReactClass<*>) =>
                 hits(filters: $filters) {
                   total
                 }
-                aggregations(filters: $filters) {
-                  files__data_category {
-                    buckets {
-                      doc_count
-                      key
-                    }
-                  }
-                  disease_type {
-                    buckets {
-                      doc_count
-                      key
-                    }
-                  }
-                }
+                
               }
             }
           }

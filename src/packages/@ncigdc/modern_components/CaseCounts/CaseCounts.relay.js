@@ -41,21 +41,8 @@ export default (Component) =>
                   hits(first: 1, filters: $filters) {
                     edges {
                       node {
-                        case_id
-                        files {
-                          hits(first: 0) {
-                            total
-                          }
-                        }
-                        summary {
-                          experimental_strategies {
-                            experimental_strategy
-                            file_count
-                          }
-                          data_categories {
-                            data_category
-                            file_count
-                          }
+                        samples {
+                        	sample_id
                         }
                       }
                     }
