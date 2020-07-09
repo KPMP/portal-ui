@@ -64,6 +64,7 @@ export default (Component: React.Class<*>) =>
                           sex
                           age
                         }
+                        provider
                       }
                     }
                   }

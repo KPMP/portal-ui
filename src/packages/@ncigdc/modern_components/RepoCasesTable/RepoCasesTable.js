@@ -69,11 +69,9 @@ export default compose(
             score={variables.score}
             sort={variables.cases_sort}
             currentFilters={variables.filters}
-            CreateSetButton={CreateRepositoryCaseSetButton}
-            AppendSetButton={AppendRepositoryCaseSetButton}
-            RemoveFromSetButton={RemoveFromRepositoryCaseSetButton}
             idField="cases.samples.sample_id"
             selectedIds={selectedIds}
+            downloadable={false}
           />
         </Row>
         <div style={{ overflowX: 'auto' }}>
