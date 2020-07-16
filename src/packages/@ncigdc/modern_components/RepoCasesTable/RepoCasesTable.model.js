@@ -34,7 +34,7 @@ const dataTypeColumns = createDataTypeColumns({
   Link: RepositoryFilesLink,
   getCellLinkFilters: node => [
     {
-      field: 'Case.samples.sample_id',
+      field: 'cases.samples.sample_id',
       value: node.samples.sample_id,
     },
   ],

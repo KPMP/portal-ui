@@ -166,7 +166,7 @@ export const createDataTypeColumns = ({
 			                query={{
 			                  filters: makeFilter([
 			                    ...getCellLinkFilters(node),
-			                    { field: 'node.files.data_type', value: full },
+			                    { field: 'data_type', value: full },
 			                  ]),
 			                }}
 			              >
