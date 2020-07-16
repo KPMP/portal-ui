@@ -84,6 +84,17 @@ export const DATA_CATEGORIES = { // this object is "sorted" on purpose, do not r
   },
 };
 
+export const DATA_TYPES_COLUMNS = {
+	TRANSCRIPTOMICS: {
+		abbr: 'Trans',
+		full: 'Transcriptomics'
+	},
+	WHOLE_SLIDE_IMAGES: {
+		abbr: 'WSI',
+		full: 'Whole Slide Images'
+	}
+}
+
 export const DATA_CATEGORIES_FOR_PROJECTS_TABLE = { // this object is "sorted" on purpose, do not rearrange the keys
   ...DATA_CATEGORIES_COMMON,
   CLINICAL_METADATA: {

@@ -1,16 +1,21 @@
 /* @flow */
 import _ from 'lodash';
-import { DATA_CATEGORIES } from '@ncigdc/utils/constants';
+import { DATA_CATEGORIES, DATA_TYPES_COLUMNS } from '@ncigdc/utils/constants';
 
 import {
   TCategoryMap,
   TFindDataCategory,
   TSumDataCategories,
   TCategoryAbbr,
+  TFindDataType,
+  TTypeMap,
 } from './types';
 
 export const CATEGORY_MAP: TCategoryMap = _.fromPairs(
   Object.values(DATA_CATEGORIES).map(c => [c.abbr, c.full]),
+);
+export const TYPE_MAP: TTypeMap = _.fromPairs(
+	Object.values(DATA_TYPES_COLUMNS).map(c => [c.abbr, c.full]),
 );
 
 export const findDataCategory: TFindDataCategory = (category, categories) =>
@@ -20,6 +25,13 @@ export const findDataCategory: TFindDataCategory = (category, categories) =>
     case_count: 0,
   };
 
+export const findDataType: TFindDataType = (type, types) =>
+  types.find(x => x.data_type === TYPE_MAP[type]) || {
+    data_type: TYPE_MAP[type],
+    file_count: 0,
+    case_count: 0,
+  };  
+  
 export const sumDataCategories: TSumDataCategories = categories =>
   Object.keys(CATEGORY_MAP).reduce(
     (acc, key: TCategoryAbbr) =>

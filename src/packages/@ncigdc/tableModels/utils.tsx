@@ -3,7 +3,7 @@ import { map, sumBy, uniq, xor } from 'lodash';
 import Tooltip from '@ncigdc/uikit/Tooltip/Tooltip';
 import Hidden from '@ncigdc/components/Hidden';
 import { tableToolTipHint } from '@ncigdc/theme/mixins';
-import { DATA_CATEGORIES, DATA_CATEGORIES_FOR_PROJECTS_TABLE } from '@ncigdc/utils/constants';
+import { DATA_CATEGORIES, DATA_CATEGORIES_FOR_PROJECTS_TABLE, DATA_TYPES_COLUMNS } from '@ncigdc/utils/constants';
 import { Th, Td, ThNum, TdNum } from '@ncigdc/uikit/Table';
 import { makeFilter } from '@ncigdc/utils/filters';
 import { findDataCategory } from '@ncigdc/utils/data';
@@ -12,6 +12,8 @@ import ProjectLink from '@ncigdc/components/Links/ProjectLink';
 import {
   IDataCategory,
   TCategoryAbbr,
+  IDataType,
+  TTypeAbbr,
 } from '@ncigdc/utils/data/types';
 
 interface ICreateDataCategoryColumnsProps{
@@ -20,6 +22,14 @@ interface ICreateDataCategoryColumnsProps{
   Link: (props: IListLinkProps) => React.Component<IListLinkProps>;
   getCellLinkFilters: (node: INode) => IFilter[];
   getTotalLinkFilters: (hits: IHits) => IFilter[];
+}
+
+interface ICreateDataTypeColumnsProps{
+ title: string;
+  countKey: string;
+  Link: (props: IListLinkProps) => React.Component<IListLinkProps>;
+  getCellLinkFilters: (node: INode) => IFilter[];
+  getTotalLinkFilters: (hits: ITypeHits) => IFilter[];
 }
 
 interface IFilter{
@@ -47,6 +57,21 @@ interface IHits {
 
 }
 
+interface ITypeHits {
+  total: number;
+  edges: Array<{
+    node: {
+      [x: string]: any;
+      summary: {
+        data_types: IDataType[];
+       case_count: number;
+        file_count: number;
+        file_size: number;
+      };
+    };
+  }>;
+}
+
 interface IThProps {
   key?: string;
   context?: string;
@@ -64,6 +89,7 @@ interface ITdProps {
   setSelectedIds: (props: string[]) => void;
   [x:string]: any;
 }
+
 export interface IColumnProps<NoTH> {
   name: string;
   id: string;
@@ -84,6 +110,73 @@ interface ICategoryColumnProps {
   tooltip: string,
   abbr: TCategoryAbbr,
   hasTotalLink?: boolean
+}
+
+interface ITypeColumnProps {
+  dataType: TTypeAbbr,
+  full: string,
+  tooltip: string,
+  abbr: TTypeAbbr,
+  hasTotalLink?: boolean
+}
+
+// interface IFile {
+//  data_type: string
+// }
+
+export const countDataTypes = ({}) => {
+
+}
+
+export const createDataTypeColumns = ({
+	title, countKey, Link, getCellLinkFilters, getTotalLinkFilters,
+	}:ICreateDataTypeColumnsProps) => {
+		const COLUMNS = DATA_TYPES_COLUMNS;
+		return [
+			{
+				name: 'Data Types',
+				id: 'data_type',
+				th: () => (
+					<Th key="data_category" colSpan={Object.keys(COLUMNS).length}
+						style={{ textAlign: 'center' }}>
+						{title}
+					</Th>
+				),
+				downloadable: true,
+      			subHeadingIds: map(COLUMNS, type => type.abbr),
+			},
+			...map(COLUMNS, (({ abbr, dataType, full, hasTotalLink = true, tooltip }: ITypeColumnProps) => ({
+				name: abbr,
+      			id: abbr,
+      			subHeading: true,
+      			th: () => (
+			        <ThNum>
+			          <abbr>
+			            <Tooltip Component={tooltip || full} style={tableToolTipHint()}>
+			              {abbr}
+			            </Tooltip>
+			          </abbr>
+			        </ThNum>
+      			),
+      			td: ({ node }: { node: INode }) => {
+        			const count = 5;
+        			return (
+			          <TdNum>
+			              <Link
+			                query={{
+			                  filters: makeFilter([
+			                    ...getCellLinkFilters(node),
+			                    { field: 'node.files.data_type', value: full },
+			                  ]),
+			                }}
+			              >
+			                {count.toLocaleString()}
+			              </Link>
+			          </TdNum>
+			        );
+			    },
+			}))),
+		];
 }
 
 export const createDataCategoryColumns = ({

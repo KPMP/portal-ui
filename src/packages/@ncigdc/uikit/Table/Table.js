@@ -21,7 +21,10 @@ const Table = ({
   headings = [],
   subheadings = [],
   ...props
-}) => (
+}) => {
+	console.log(props);
+	
+	return (
   <table style={{ ...styles.table, ...style }} {...props}>
     <thead>
       <Tr>
@@ -38,5 +41,5 @@ const Table = ({
     {body}
   </table>
 );
-
+}
 export default Table;

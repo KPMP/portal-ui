@@ -540,12 +540,32 @@ type Case {
 }
 
 type CaseAggregations {
+  case_count: Aggregations
+  data_types__case_count: Aggregations
+  data_types__data_type: Aggregations
+  data_types__file_count: Aggregations
   demographics__age: Aggregations
   demographics__sex: Aggregations
+  file_count: Aggregations
+  files__access: Aggregations
+  files__data_category: Aggregations
+  files__data_format: Aggregations
+  files__data_type: Aggregations
+  files__experimental_strategy: Aggregations
+  files__file_id: Aggregations
+  files__file_name: Aggregations
+  files__file_size: Aggregations
+  files__platform: Aggregations
+  files__project: Aggregations
   provider: Aggregations
   samples__sample_id: Aggregations
   samples__sample_type: Aggregations
   samples__tissue_type: Aggregations
+  summary__case_count: Aggregations
+  summary__data_types__case_count: Aggregations
+  summary__data_types__data_type: Aggregations
+  summary__data_types__file_count: Aggregations
+  summary__file_count: Aggregations
 }
 
 type CaseConnection {
@@ -563,12 +583,29 @@ type CaseEdge {
   node: CaseNode
 }
 
+type CaseFiles {
+  access: String
+  data_category: String
+  data_format: String
+  data_type: String
+  experimental_strategy: String
+  file_id: String
+  file_name: String
+  file_size: String
+  platform: String
+  project: String
+}
+
 type CaseNode implements Node {
   id: ID!
   score: Int
+  case_count: String
+  file_count: String
   provider: String
   demographics: CaseDemographics
+  files: CaseFiles
   samples: CaseSamples
+  summary: [CaseSummary]
 }
 
 type CaseSamples {
@@ -577,9 +614,60 @@ type CaseSamples {
   tissue_type: String
 }
 
-type CaseAnnotation implements Node {
-  id: ID!
+type CaseSummary {
+  data_types: CaseSummaryData_types
+  case_count: String
+  file_count: String
+}
 
+type CaseSummaryData_types {
+  mapping: JSON
+  extended(fields: [String]): JSON
+  hits(
+    score: String
+    offset: Int
+    sort: [Sort]
+    filters: JSON
+    before: String
+    after: String
+    first: Int
+    last: Int
+    searchAfter: JSON
+  ): CaseSummaryData_typesConnection
+  aggregations(
+    filters: JSON
+    include_missing: Boolean
+    aggregations_filter_themselves: Boolean
+  ): CaseSummaryData_typesAggregations
+}
+
+type CaseSummaryData_typesAggregations {
+  case_count: Aggregations
+  data_type: Aggregations
+  file_count: Aggregations
+}
+
+type CaseSummaryData_typesConnection {
+  total: Int!
+  edges: [CaseSummaryData_typesEdge]
+}
+
+type CaseSummaryData_typesEdge {
+  searchAfter: JSON
+  node: CaseSummaryData_typesNode
+}
+
+type CaseSummaryData_typesNode implements Node {
+  id: ID!
+  score: Int
+  case_count: String
+  data_type: String
+  file_count: String
+}
+
+type CaseAnnotation implements Node {
+	
+  id: ID!
   # Status of the annotation.
   status: String
 
@@ -814,10 +902,6 @@ type CaseFileEdge {
 
   # The item at the end of the edge
   node: CaseFile
-}
-
-type CaseFiles {
-  hits(offset: Int, sort: [Sort], filters: JSON, before: String, after: String, first: Int, last: Int): CaseFileConnection
 }
 
 type CivicAnnotation {

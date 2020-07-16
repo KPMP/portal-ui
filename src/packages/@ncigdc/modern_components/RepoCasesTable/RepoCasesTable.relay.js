@@ -26,7 +26,6 @@ export default (Component: React.Class<*>) =>
             cases_size: parseIntParam(q.cases_size, 20),
             cases_sort: parseJSONParam(q.cases_sort, null),
             filters: parseFilterParam(q.filters, defaultFilters),
-            score: 'annotations.annotation_id',
           },
         };
       },
@@ -65,6 +64,10 @@ export default (Component: React.Class<*>) =>
                           age
                         }
                         provider
+                        files {
+                        	data_type
+                        }
+    		  			
                       }
                     }
                   }

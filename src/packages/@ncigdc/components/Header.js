@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 import { isEqual } from 'lodash';
 
 import { dismissNotification, removeNotification } from '@ncigdc/dux/bannerNotification';
-import nciGdcLogo from '@ncigdc/theme/images/NHI_GDC_DataPortal-logo.svg';
 import HomeLink from '@ncigdc/components/Links/HomeLink';
 import AnalysisLink from '@ncigdc/components/Links/AnalysisLink';
 import RepositoryLink from '@ncigdc/components/Links/RepositoryLink';

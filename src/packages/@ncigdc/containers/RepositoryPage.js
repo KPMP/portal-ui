@@ -16,7 +16,6 @@ import FilesTable from '@ncigdc/modern_components/FilesTable';
 import { SaveIcon } from '@ncigdc/theme/icons';
 import withFilters from '@ncigdc/utils/withFilters';
 import formatFileSize from '@ncigdc/utils/formatFileSize';
-import RepoCasesPies from '@ncigdc/components/TabPieCharts/RepoCasesPies';
 import RepoFilesPies from '@ncigdc/components/TabPieCharts/RepoFilesPies';
 import withRouter from '@ncigdc/utils/withRouter';
 import ActionsRow from '@ncigdc/components/ActionsRow';
@@ -81,7 +80,6 @@ const enhance = compose(
 );
 
 export const RepositoryPageComponent = (props: TProps) => {
-	console.log(props);
   const fileCount = props.viewer.File.hits.total;
   const caseCount = props.viewer.Case.hits.total;
 //  const fileSize = props.viewer.cart_summary.aggregations.fs.value;
@@ -151,7 +149,6 @@ export const RepositoryPageComponent = (props: TProps) => {
                   text: `Cases (${caseCount.toLocaleString()})`,
                   component: !!props.viewer.Case.hits.total ? (
                     <div>
-
                       <RepoCasesTable />
                     </div>
                   ) : (
@@ -194,9 +191,6 @@ export const RepositoryPageQuery = {
         }
 	    Case {
 	    
-	    	pies: aggregations(filters: $filters aggregations_filter_themselves: true) {
-	    	${RepoCasesPies.getFragment('aggregations')}
-	    	}	
 	    	hits(first: $files_size offset: $files_offset, filters: $filters, sort: $files_sort) {
 	    		total
 	    	}
