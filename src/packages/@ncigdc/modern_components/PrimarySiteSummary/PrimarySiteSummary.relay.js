@@ -74,12 +74,6 @@ export default (Component: ReactClass<*>) =>
                       key
                     }
                   }
-                  disease_type {
-                    buckets {
-                      doc_count
-                      key
-                    }
-                  }
                 }
               }
             }

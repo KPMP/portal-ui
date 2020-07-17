@@ -56,16 +56,7 @@ export default (Component: ReactClass<*>) => (props: Object) => {
                   }
                 }
               }
-              cases {
-                aggregations {
-                  primary_site {
-                    buckets {
-                      doc_count
-                      key
-                    }
-                  }
-                }
-              }
+              
             }
           }
         }

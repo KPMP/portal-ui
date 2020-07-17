@@ -112,13 +112,11 @@ export default (Component: ReactClass<*>) =>
         query={graphql`
           query ImageViewer_relayQuery(
             $filters: JSON
-            $slideFilter: JSON
             $cases_size: Int
             $cases_offset: Int
           ) {
             viewer {
-              repository {
-                cases {
+                Case {
                   hits(
                     filters: $filters
                     first: $cases_size
@@ -126,62 +124,10 @@ export default (Component: ReactClass<*>) =>
                   ) {
                     total
                     edges {
-                      cursor
                       node {
                         id
-                        case_id
-                        submitter_id
-                        project {
-                          project_id
-                        }
                         files {
-                          hits(filters: $slideFilter, first: 99) {
-                            edges {
-                              node {
                                 file_id
-                                submitter_id
-                              }
-                            }
-                          }
-                        }
-                        samples {
-                          hits(first: 99) {
-                            edges {
-                              node {
-                                portions {
-                                  hits(first: 99) {
-                                    edges {
-                                      node {
-                                        slides {
-                                          hits(first: 99) {
-                                            edges {
-                                              node {
-                                                submitter_id
-                                                slide_id
-                                                percent_tumor_nuclei
-                                                percent_monocyte_infiltration
-                                                percent_normal_cells
-                                                percent_stromal_cells
-                                                percent_eosinophil_infiltration
-                                                percent_lymphocyte_infiltration
-                                                percent_neutrophil_infiltration
-                                                section_location
-                                                percent_granulocyte_infiltration
-                                                percent_necrosis
-                                                percent_inflam_infiltration
-                                                number_proliferating_cells
-                                                percent_tumor_cells
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
                         }
                       }
                     }
@@ -189,7 +135,6 @@ export default (Component: ReactClass<*>) =>
                 }
               }
             }
-          }
         `}
       />
     );

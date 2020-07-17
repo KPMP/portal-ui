@@ -38,53 +38,16 @@ export default (Component: ReactClass<*>) =>
         query={graphql`
           query CaseSummary_relayQuery($filters: JSON) {
             viewer {
-              repository {
-                cases {
+                Case {
                   hits(first: 1, filters: $filters) {
                     edges {
                       node {
-                        case_id
-                        submitter_id
-                        primary_site
-                        disease_type
-                        annotations {
-                          hits(first: 20) {
-                            total
-                            edges {
-                              node {
-                                annotation_id
-                              }
-                            }
-                          }
-                        }
-                        summary {
-                          experimental_strategies {
-                            experimental_strategy
-                            file_count
-                          }
-                        }
                         files {
-                          hits(first: 99) {
-                            total
-                            edges {
-                              node {
                                 file_id
                                 data_type
-                                acl
-                                state
                                 access
                                 file_id
                                 file_size
-                              }
-                            }
-                          }
-                        }
-                        project {
-                          project_id
-                          name
-                          program {
-                            name
-                          }
                         }
                       }
                     }
@@ -92,7 +55,6 @@ export default (Component: ReactClass<*>) =>
                 }
               }
             }
-          }
         `}
       />
     );

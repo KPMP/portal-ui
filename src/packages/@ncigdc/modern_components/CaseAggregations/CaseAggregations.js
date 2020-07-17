@@ -32,12 +32,12 @@ export type TProps = {
   facets: { facets: string },
   parsedFacets: Object,
   aggregations: {
-    cases__demographics__sex: { buckets: [IBucket] },
-    cases__demographics__age: { buckets: [IBucket] },
-    cases__samples__tissue_type: { buckets: [IBucket] },
-    cases__samples__sample_type: { buckets: [IBucket] },
-    cases__samples__sample_id: { buckets: [IBucket] },
-    cases__provider: { buckets: [IBucket] },
+    demographics__sex: { buckets: [IBucket] },
+    demographics__age: { buckets: [IBucket] },
+    samples__tissue_type: { buckets: [IBucket] },
+    samples__sample_type: { buckets: [IBucket] },
+    samples__sample_id: { buckets: [IBucket] },
+    provider: { buckets: [IBucket] },
   },
   setAutocomplete: Function,
   theme: Object,
@@ -62,45 +62,45 @@ export type TProps = {
 const presetFacets = [
   {
     title: 'Sex',
-    field: 'cases.demographics.sex',
-    full: 'cases.demographics.sex',
+    field: 'Case.demographics.sex',
+    full: 'Case.demographics.sex',
     type: 'keyword',
   },
   {
     title: 'Age',
-    field: 'cases.demographics.age',
-    full: 'cases.demographics.age',
+    field: 'Case.demographics.age',
+    full: 'Case.demographics.age',
     type: 'keyword',
   },
   {
 	  title: 'Tissue Type',
-	  field: 'cases.samples.tissue_type',
-	  full: 'cases.samples.tissue_type',
+	  field: 'Case.samples.tissue_type',
+	  full: 'Case.samples.tissue_type',
 	  type: 'keyword',
   },
   {
 	  title: 'Sample Type',
-	  field: 'cases.samples.sample_type',
-	  full: 'cases.samples.sample_type',
+	  field: 'Case.samples.sample_type',
+	  full: 'Case.samples.sample_type',
 	  type: 'keyword',
   },
   {
 	  title: 'Sample ID',
-	  field: 'cases.samples.sample_id',
-	  full: 'cases.samples.sample_id',
+	  field: 'Case.samples.sample_id',
+	  full: 'Case.samples.sample_id',
 	  type: 'terms',
   },
   {
 	  title: 'Provider',
-	  field: 'cases.provider',
-	  full: 'cases.provider',
+	  field: 'Case.provider',
+	  full: 'Case.provider',
 	  type: 'keyword',
   },
 
 ];
 
 const presetFacetFields = presetFacets.map(x => x.field);
-const entityType = 'Files';
+const entityType = 'cases';
 
 const enhance = compose(
   setDisplayName('RepoCaseAggregations'),

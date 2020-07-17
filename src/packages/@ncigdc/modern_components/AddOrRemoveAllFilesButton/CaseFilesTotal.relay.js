@@ -39,24 +39,19 @@ export default (Component: ReactClass<*>) =>
         query={graphql`
           query CaseFilesTotal_relayQuery($filters: JSON) {
             viewer {
-              repository {
-                cases {
+                Case {
                   hits(first: 1, filters: $filters) {
                     edges {
                       node {
-                        case_id
                         files {
-                          hits(first: 0) {
-                            total
-                          }
-                        }
+                        	file_id
+    		  			}
                       }
                     }
                   }
                 }
               }
             }
-          }
         `}
       />
     );

@@ -78,52 +78,19 @@ export default (Component: React$Element<*>) =>
           query CohortComparison_relayQuery(
             $filter1: JSON
             $filter2: JSON
-            $facets: [String]!
           ) {
             viewer {
-              repository {
-                result1: cases {
+                result1: Case {
                   hits(filters: $filter1) {
                     total
                   }
-                  facets(filters: $filter1, facets: $facets)
-                  aggregations(filters: $filter1) {
-                    diagnoses__age_at_diagnosis {
-                      stats {
-                        min
-                        max
-                      }
-                      histogram(interval: 3652.4444444444) {
-                        buckets {
-                          doc_count
-                          key
-                        }
-                      }
-                    }
-                  }
                 }
-                result2: cases {
+                result2: Case {
                   hits(filters: $filter2) {
                     total
                   }
-                  facets(filters: $filter2, facets: $facets)
-                  aggregations(filters: $filter2) {
-                    diagnoses__age_at_diagnosis {
-                      stats {
-                        min
-                        max
-                      }
-                      histogram(interval: 3652.4444444444) {
-                        buckets {
-                          doc_count
-                          key
-                        }
-                      }
-                    }
-                  }
                 }
               }
-            }
           }
         `}
       />

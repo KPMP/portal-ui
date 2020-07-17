@@ -195,6 +195,11 @@ export const RepositoryPageQuery = {
               total
             }
         }
+        Case {
+         hits(first: $files_size offset: $files_offset, filters: $filters, sort: $files_sort) {
+              total
+            }
+        }
       }
     `,
   },

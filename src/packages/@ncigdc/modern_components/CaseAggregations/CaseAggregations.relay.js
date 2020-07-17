@@ -9,7 +9,7 @@ import Query from '@ncigdc/modern_components/Query';
 import { parseFilterParam } from '@ncigdc/utils/uri';
 import withRouter from '@ncigdc/utils/withRouter';
 
-const entityType = 'Files';
+const entityType = 'RepositoryCases';
 export default (Component: ReactClass<*>) =>
   compose(
     withRouter,
@@ -51,42 +51,42 @@ export default (Component: ReactClass<*>) =>
             $filters: JSON
           ) {
             viewer {
-              File { 
+              Case { 
                   aggregations(
                     filters: $filters
                     aggregations_filter_themselves: false
                   ) {
-                    cases__provider {
+                    provider {
                     	buckets {
                     		doc_count
                     		key
                     	}
                     }
-                    cases__demographics__sex {
+                    demographics__sex {
                       buckets {
                         doc_count
                         key
                       }
                     }
-    		  		cases__demographics__age {
+    		  		demographics__age {
     		  			buckets {
     		  				doc_count
     		  				key
     		  			}
     		  		}
-                    cases__samples__tissue_type {
+                    samples__tissue_type {
                     	buckets {
                     		doc_count
                     		key
                     	}
                     }
-		    		cases__samples__sample_type {
+		    		samples__sample_type {
 		    			buckets {
 		    		  		doc_count
 		    		  		key
 		    		  	}
 		    		},
-		    		cases__samples__sample_id {
+		    		samples__sample_id {
 		    			buckets {
 		    				doc_count
 		    				key

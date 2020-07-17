@@ -41,11 +41,9 @@ export default (Component) => (props) => {
       query={graphql`
         query repositoryCaseSlides_relayQuery(
           $filters: JSON
-          $slideFilter: JSON
         ) {
           viewer {
-            repository {
-              cases {
+              Case {
                 # only counts file ids for the first 99 cases instead of all
                 # becase passing in all with a parent query (10903) caused timeout
                 # it's fine because mostly used for one case or disable if 0
@@ -54,9 +52,7 @@ export default (Component) => (props) => {
                   edges {
                     node {
                       files {
-                        hits(filters: $slideFilter, first: 0) {
-                          total
-                        }
+                      	file_name
                       }
                     }
                   }
@@ -64,7 +60,6 @@ export default (Component) => (props) => {
               }
             }
           }
-        }
       `}
     />
   );

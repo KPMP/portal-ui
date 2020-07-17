@@ -35,7 +35,6 @@ export default (Component: ReactClass<*>) => compose(
           query SuggestionFacet_relayQuery(
             $query: String
             $queryType: [String]
-            $showCases: Boolean!
             $showFiles: Boolean!
             $showGenes: Boolean!
             $showProjects: Boolean!
@@ -49,16 +48,7 @@ export default (Component: ReactClass<*>) => compose(
                   file_name
                 }
               }
-              cases: hits @include(if: $showCases) {
-                id
-                ... on Case {
-                  case_id
-                  project {
-                    project_id
-                  }
-                  submitter_id
-                }
-              }
+             
               projects: hits @include(if: $showProjects) {
                 id
                 ... on Project {

@@ -38,26 +38,18 @@ export default (Component: ReactClass<*>) =>
         Component={Component}
         query={graphql`
           query SampleType_relayQuery($filters: JSON) {
-            repository {
-              cases {
+              Case {
                 hits(first: 1, filters: $filters) {
                   edges {
                     node {
                       samples {
-                        hits(first: 1, filters: $filters) {
-                          edges {
-                            node {
                               sample_type
-                            }
-                          }
-                        }
-                      }
                     }
                   }
                 }
               }
             }
-          }
+           }
         `}
       />
     );
