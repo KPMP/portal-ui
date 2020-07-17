@@ -62,45 +62,45 @@ export type TProps = {
 const presetFacets = [
   {
     title: 'Sex',
-    field: 'Case.demographics.sex',
-    full: 'Case.demographics.sex',
+    field: 'demographics.sex',
+    full: 'demographics.sex',
     type: 'keyword',
   },
   {
     title: 'Age',
-    field: 'Case.demographics.age',
-    full: 'Case.demographics.age',
+    field: 'demographics.age',
+    full: 'demographics.age',
     type: 'keyword',
   },
   {
 	  title: 'Tissue Type',
-	  field: 'Case.samples.tissue_type',
-	  full: 'Case.samples.tissue_type',
+	  field: 'samples.tissue_type',
+	  full: 'samples.tissue_type',
 	  type: 'keyword',
   },
   {
 	  title: 'Sample Type',
-	  field: 'Case.samples.sample_type',
-	  full: 'Case.samples.sample_type',
+	  field: 'samples.sample_type',
+	  full: 'samples.sample_type',
 	  type: 'keyword',
   },
   {
 	  title: 'Sample ID',
-	  field: 'Case.samples.sample_id',
-	  full: 'Case.samples.sample_id',
+	  field: 'samples.sample_id',
+	  full: 'samples.sample_id',
 	  type: 'terms',
   },
   {
 	  title: 'Provider',
-	  field: 'Case.provider',
-	  full: 'Case.provider',
+	  field: 'provider',
+	  full: 'provider',
 	  type: 'keyword',
   },
 
 ];
 
 const presetFacetFields = presetFacets.map(x => x.field);
-const entityType = 'cases';
+const entityType = 'RepositoryCases';
 
 const enhance = compose(
   setDisplayName('RepoCaseAggregations'),
@@ -240,7 +240,7 @@ const CaseAggregationsComponent = (props: TProps) => (
       <FacetWrapper
         additionalProps={facet.additionalProps}
         aggregation={
-          props.viewer.File.aggregations[
+          props.viewer.Case.aggregations[
             escapeForRelay(facet.field)
         ]
         }
