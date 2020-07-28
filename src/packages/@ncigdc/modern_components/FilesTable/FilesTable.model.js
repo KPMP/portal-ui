@@ -182,13 +182,13 @@ const filesTableModel = [
     hidden: true,
   },
   {
-	  name: 'Sample ID',
-	  id: 'sample_id',
-	  th: () => <Th>Sample ID</Th>,
-	  td: ({ node }) => <Td>{node.sample_id ? node.sample_id.join(", ") : '--'}</Td>,
-	  sortable: true,
-	  downloadable: true,
-	  hidden: false,
+    name: 'Workflow Type',
+    id: 'workflow_type',
+    th: () => <Th>Workflow Type</Th>,
+    td: ({ node }) => <Td>{node.workflow_type || '--'}</Td>,
+    sortable: true,
+    downloadable: true,
+    hidden: true,
   },
   {
     name: 'Platform',
@@ -198,6 +198,16 @@ const filesTableModel = [
     sortable: true,
     downloadable: true,
     hidden: false,
+  },
+  {
+	  name: 'Participant ID',
+	  id: 'sample_id',
+	  th: () => <Th>Participant ID</Th>,
+	  td: ({ node }) => <Td>{node.cases.samples.sample_id ? 
+			  node.cases.samples.sample_id.join(", ") : '--'}</Td>,
+	  sortable: true,
+	  downloadable: true,
+	  hidden: false,
   },
 ];
 

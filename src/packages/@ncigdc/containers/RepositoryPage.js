@@ -17,7 +17,7 @@ import { SaveIcon } from '@ncigdc/theme/icons';
 import withFilters from '@ncigdc/utils/withFilters';
 import formatFileSize from '@ncigdc/utils/formatFileSize';
 import RepoCasesPies from '@ncigdc/components/TabPieCharts/RepoCasesPies';
-import RepoFilesPies from '@ncigdc/components/TabPieCharts/RepoFilesPies';
+
 import withRouter from '@ncigdc/utils/withRouter';
 import ActionsRow from '@ncigdc/components/ActionsRow';
 import features from '../../../features';
@@ -86,21 +86,21 @@ export const RepositoryPageComponent = (props: TProps) => {
 //  const fileSize = props.viewer.cart_summary.aggregations.fs.value;
   
   // hacking this in to get things to work
-  const caseCount = 0;
+  const caseCount = 1;
   const fileSize = 0;
   const facetTabs=[
-        {
-          id: 'files',
-          text: 'Files',
-          component: <FileAggregations relay={props.relay} />,
-        }];
-  if (features.caseAggregations) {
-    facetTabs.push({
-      id: 'cases',
-      text: 'Cases',
-      component: <CaseAggregations relay={props.relay} />,
-    })
-  }
+	{
+	    id: 'participants',
+	    text: 'Participants',
+	    component: <CaseAggregations relay={props.relay} />,
+	},
+    {
+      id: 'files',
+      text: 'Files',
+      component: <FileAggregations relay={props.relay} />,
+    }
+   
+  ];
 
   return (
     <div className="test-repository-page">
@@ -136,9 +136,6 @@ export const RepositoryPageComponent = (props: TProps) => {
                   text: `Files (${fileCount.toLocaleString()})`,
                   component: !!props.viewer.File.hits.total ? (
                     <div>
-                      <RepoFilesPies
-                        aggregations={props.viewer.File.pies}
-                      />
                       <FilesTable downloadable={false} />
                     </div>
                   ) : (
@@ -150,10 +147,10 @@ export const RepositoryPageComponent = (props: TProps) => {
 //                {
 //                  id: 'cases',
 //                  text: `Cases (${caseCount.toLocaleString()})`,
-//                  component: !!props.viewer.repository.cases.hits.total ? (
+//                  component: !!props.viewer.File.hits.total ? (
 //                    <div>
 //                      <RepoCasesPies
-//                        aggregations={props.viewer.repository.cases.pies}
+//                        aggregations={props.viewer.File.pies}
 //                      />
 //                      <RepoCasesTable />
 //                    </div>
@@ -188,9 +185,6 @@ export const RepositoryPageQuery = {
 
           File {
 
-            pies: aggregations(filters: $filters aggregations_filter_themselves: true) {
-              ${RepoFilesPies.getFragment('aggregations')}
-            }
             hits(first: $files_size offset: $files_offset, filters: $filters, sort: $files_sort) {
               total
             }

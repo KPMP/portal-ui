@@ -5253,6 +5253,9 @@ type FileNode implements Node {
   experimental_strategy: String
 
   # keyword
+  workflow_type: String
+
+  # keyword
   file_name: String
 
   # keyword
@@ -5323,6 +5326,9 @@ type FileNode implements Node {
 
   # keyword
   file_id: String
+
+  # keyword
+  package_id: String
 
   sample_id: [String]
 
@@ -5772,26 +5778,29 @@ type FileAggregations {
   cases__created_datetime: Aggregations
   cases__slide_ids: Aggregations
   cases__days_to_index: NumericAggregations
-  cases__demographic__cause_of_death: Aggregations
-  cases__demographic__race: Aggregations
-  cases__demographic__age_is_obfuscated: Aggregations
-  cases__demographic__updated_datetime: Aggregations
-  cases__demographic__weeks_gestation_at_birth: NumericAggregations
-  cases__demographic__gender: Aggregations
-  cases__demographic__state: Aggregations
-  cases__demographic__occupation_duration_years: NumericAggregations
-  cases__demographic__submitter_id: Aggregations
-  cases__demographic__cause_of_death_source: Aggregations
-  cases__demographic__year_of_birth: NumericAggregations
-  cases__demographic__demographic_id: Aggregations
-  cases__demographic__days_to_birth: NumericAggregations
-  cases__demographic__premature_at_birth: Aggregations
-  cases__demographic__age_at_index: NumericAggregations
-  cases__demographic__vital_status: Aggregations
-  cases__demographic__days_to_death: NumericAggregations
-  cases__demographic__created_datetime: Aggregations
-  cases__demographic__ethnicity: Aggregations
-  cases__demographic__year_of_death: NumericAggregations
+  cases__demographics__cause_of_death: Aggregations
+  cases__demographics__race: Aggregations
+  cases__demographics__age_is_obfuscated: Aggregations
+  cases__demographics__updated_datetime: Aggregations
+  cases__demographics__weeks_gestation_at_birth: NumericAggregations
+  cases__demographics__gender: Aggregations
+  cases__demographics__state: Aggregations
+  cases__demographics__occupation_duration_years: NumericAggregations
+  cases__demographics__submitter_id: Aggregations
+  cases__demographics__cause_of_death_source: Aggregations
+  cases__demographics__year_of_birth: NumericAggregations
+  cases__demographics__demographic_id: Aggregations
+  cases__demographics__days_to_birth: NumericAggregations
+  cases__demographics__premature_at_birth: Aggregations
+  cases__demographics__age_at_index: NumericAggregations
+  cases__demographics__vital_status: Aggregations
+  cases__demographics__days_to_death: NumericAggregations
+  cases__demographics__created_datetime: Aggregations
+  cases__demographics__ethnicity: Aggregations
+  cases__demographics__year_of_death: NumericAggregations
+  cases__demographics__age: Aggregations
+  cases__demographics__sex: Aggregations
+  cases__tissue_source: Aggregations
 
   # The yes/no/unknown indicator used to describe whether a patient was unable to
   # be contacted or seen for follow-up information.
@@ -5807,7 +5816,7 @@ type FileAggregations {
   cases__samples__tumor_code_id: Aggregations
   cases__samples__submitter_id: Aggregations
   cases__samples__intermediate_dimension: NumericAggregations
-  cases__samples__sample_id: Aggregations
+  cases__samples__participant_id: Aggregations
   cases__samples__time_between_clamping_and_freezing: NumericAggregations
   cases__samples__pathology_report_uuid: Aggregations
   cases__samples__created_datetime: Aggregations
@@ -6353,6 +6362,19 @@ type FileAggregations {
   file_autocomplete: Aggregations
   average_insert_size: NumericAggregations
   sample_id: Aggregations
+  workflow_type: Aggregations
+  protocol: Aggregations
+}
+
+type FileCasesDemographics {
+  age: String
+  sex: String
+}
+
+type FileCasesSamples {
+  participant_id: [String]
+  sample_type: [String]
+  tissue_type: [String]
 }
 
 type FileAnalysis {
@@ -6581,7 +6603,9 @@ type FileCaseEdge {
 }
 
 type FileCases {
-  hits(offset: Int, sort: [Sort], filters: JSON, before: String, after: String, first: Int, last: Int): FileCaseConnection
+  demographics: FileCasesDemographics
+  samples: FileCasesSamples
+  tissue_source: String
 }
 
 type FileCenter {

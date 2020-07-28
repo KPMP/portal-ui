@@ -23,6 +23,7 @@ import FacetHeader from '@ncigdc/components/Aggregations/FacetHeader';
 import { UploadCaseSet } from '@ncigdc/components/Modals/UploadSet';
 
 import { IBucket } from '@ncigdc/components/Aggregations/types';
+import features from '../../../../features';
 
 export type TProps = {
   caseIdCollapsed: boolean,
@@ -31,16 +32,12 @@ export type TProps = {
   facets: { facets: string },
   parsedFacets: Object,
   aggregations: {
-    demographic__ethnicity: { buckets: [IBucket] },
-    demographic__gender: { buckets: [IBucket] },
-    demographic__race: { buckets: [IBucket] },
-    demographic__vital_status: { buckets: [IBucket] },
-    demographic__days_to_death: { stats: { max: number, min: number } },
-    diagnoses__age_at_diagnosis: { stats: { max: number, min: number } },
-    disease_type: { buckets: [IBucket] },
-    primary_site: { buckets: [IBucket] },
-    project__program__name: { buckets: [IBucket] },
-    project__project_id: { buckets: [IBucket] },
+    cases__demographics__sex: { buckets: [IBucket] },
+    cases__demographics__age: { buckets: [IBucket] },
+    cases__samples__tissue_type: { buckets: [IBucket] },
+    cases__samples__sample_type: { buckets: [IBucket] },
+    cases__samples__sample_id: { buckets: [IBucket] },
+    cases__provider: { buckets: [IBucket] },
   },
   setAutocomplete: Function,
   theme: Object,
@@ -64,108 +61,64 @@ export type TProps = {
 
 const presetFacets = [
   {
-    title: 'Case',
-    field: 'case_id',
-    full: 'cases.case_id',
-    doc_type: 'cases',
-    type: 'id',
-  },
-  {
-    title: 'Case ID',
-    field: 'submitter_id',
-    full: 'cases.submitter_id',
-    doc_type: 'cases',
-    type: 'id',
-    placeholder: 'eg. TCGA-DD*, *DD*, TCGA-DD-AAVP',
-  },
-  {
-    title: 'Primary Site',
-    field: 'primary_site',
-    full: 'cases.primary_site',
-    doc_type: 'cases',
+    title: 'Sex',
+    field: 'cases.demographics.sex',
+    full: 'cases.demographics.sex',
     type: 'keyword',
   },
   {
-    title: 'Program',
-    field: 'project.program.name',
-    full: 'cases.project.program.name',
-    doc_type: 'cases',
+    title: 'Age',
+    field: 'cases.demographics.age',
+    full: 'cases.demographics.age',
     type: 'keyword',
   },
   {
-    title: 'Project',
-    field: 'project.project_id',
-    full: 'cases.project.project_id',
-    doc_type: 'cases',
-    type: 'terms',
+	  title: 'Tissue Type',
+	  field: 'cases.samples.tissue_type',
+	  full: 'cases.samples.tissue_type',
+	  type: 'keyword',
   },
   {
-    title: 'Disease Type',
-    field: 'disease_type',
-    full: 'cases.disease_type',
-    doc_type: 'cases',
-    type: 'keyword',
+	  title: 'Sample Type',
+	  field: 'cases.samples.sample_type',
+	  full: 'cases.samples.sample_type',
+	  type: 'keyword',
   },
   {
-    title: 'Gender',
-    field: 'demographic.gender',
-    full: 'cases.demographic.gender',
-    doc_type: 'cases',
-    type: 'keyword',
+	  title: 'Participant ID',
+	  field: 'cases.samples.participant_id',
+	  full: 'cases.samples.participant_id',
+	  type: 'terms',
   },
   {
-    title: 'Age at Diagnosis',
-    field: 'diagnoses.age_at_diagnosis',
-    full: 'cases.diagnoses.age_at_diagnosis',
-    doc_type: 'cases',
-    type: 'long',
-    additionalProps: { convertDays: true },
+	  title: 'Tissue Source',
+	  field: 'cases.tissue_source',
+	  full: 'cases.tissue_source',
+	  type: 'keyword',
   },
   {
-    title: 'Vital Status',
-    field: 'demographic.vital_status',
-    full: 'cases.demographic.vital_status',
-    doc_type: 'cases',
-    type: 'keyword',
-  },
-  {
-    title: 'Days to Death',
-    field: 'demographic.days_to_death',
-    full: 'cases.demographic.days_to_death',
-    doc_type: 'cases',
-    type: 'long',
-  },
-  {
-    title: 'Race',
-    field: 'demographic.race',
-    full: 'cases.demographic.race',
-    doc_type: 'cases',
-    type: 'keyword',
-  },
-  {
-    title: 'Ethnicity',
-    field: 'demographic.ethnicity',
-    full: 'cases.demographic.ethnicity',
-    doc_type: 'cases',
-    type: 'keyword',
-  },
+	  title: 'Protocol',
+	  field: 'protocol',
+	  full: 'protocol',
+	  type: 'keyword'
+  }
+
 ];
 
 const presetFacetFields = presetFacets.map(x => x.field);
-const entityType = 'RepositoryCases';
+const entityType = 'Files';
 
 const enhance = compose(
   setDisplayName('RepoCaseAggregations'),
   withFacetSelection({
     entityType,
     presetFacetFields,
-    validFacetDocTypes: ['cases'],
   }),
   withTheme,
   withState('caseIdCollapsed', 'setCaseIdCollapsed', false),
   withPropsOnChange(['viewer'], ({ viewer }) => ({
-    parsedFacets: viewer.repository.cases.facets
-      ? tryParseJSON(viewer.repository.cases.facets, {})
+    parsedFacets: viewer.File
+      ? tryParseJSON(viewer.File, {})
       : {},
   })),
 );
@@ -179,6 +132,7 @@ const styles = {
 
 const CaseAggregationsComponent = (props: TProps) => (
   <div className="test-case-aggregations">
+  { features.caseAggregations &&
     <div
       className="text-right"
       style={{
@@ -195,98 +149,104 @@ const CaseAggregationsComponent = (props: TProps) => (
           &nbsp;|&nbsp;
         </span>
       )}
-      <a
-        onClick={() => props.setShouldShowFacetSelection(true)}
-        style={styles.link}
-        >
-        Add a Case/Biospecimen Filter
-      </a>
+	      <a
+	        onClick={() => props.setShouldShowFacetSelection(true)}
+	        style={styles.link}
+	        >
+	        Add a Case/Biospecimen Filter
+	      </a>
     </div>
-    <Modal
-      isOpen={props.shouldShowFacetSelection}
-      style={{
-        content: {
-          border: 0,
-          padding: '15px',
-          width: '65%',
-        },
-      }}
-      >
-      <FacetSelection
-        additionalFacetData={props.parsedFacets}
-        docType="cases"
-        excludeFacetsBy={props.facetExclusionTest}
-        isCaseInsensitive
-        onRequestClose={() => props.setShouldShowFacetSelection(false)}
-        onSelect={props.handleSelectFacet}
-        title="Add a Case/Biospecimen Filter"
-        />
-    </Modal>
-
+  }
+    { features.caseAggregations &&
+	    <Modal
+	      isOpen={props.shouldShowFacetSelection}
+	      style={{
+	        content: {
+	          border: 0,
+	          padding: '15px',
+	          width: '65%',
+	        },
+	      }}
+	      >
+	      <FacetSelection
+	        additionalFacetData={props.parsedFacets}
+	        docType="cases"
+	        excludeFacetsBy={props.facetExclusionTest}
+	        isCaseInsensitive
+	        onRequestClose={() => props.setShouldShowFacetSelection(false)}
+	        onSelect={props.handleSelectFacet}
+	        title="Add a Case/Biospecimen Filter"
+	        />
+	    </Modal>
+    }
     {props.userSelectedFacets.map(facet => (
-      <FacetWrapper
-        aggregation={props.parsedFacets[facet.field]}
-        facet={facet}
-        isRemovable
-        key={facet.full}
-        onRequestRemove={() => props.handleRequestRemoveFacet(facet)}
-        relayVarName="repoCaseCustomFacetFields"
-        style={{ borderBottom: `1px solid ${props.theme.greyScale5}` }}
-        />
+    		<FacetWrapper
+    		aggregation={props.parsedFacets[facet.field]}
+    		facet={facet}
+    		isRemovable
+    		key={facet.full}
+    		onRequestRemove={() => props.handleRequestRemoveFacet(facet)}
+    		relayVarName="repoCaseCustomFacetFields"
+    			style={{ borderBottom: `1px solid ${props.theme.greyScale5}` }}
+    		/>
     ))}
 
-    <FacetHeader
-      collapsed={props.caseIdCollapsed}
-      description="Enter UUID or ID of Case, Sample, Portion, Slide, Analyte or Aliquot"
-      field="cases.case_id"
-      setCollapsed={props.setCaseIdCollapsed}
-      title="Case"
-      />
-
-    <SuggestionFacet
-      collapsed={props.caseIdCollapsed}
-      doctype="cases"
-      dropdownItem={x => (
-        <Row>
-          <CaseIcon style={{
-            paddingRight: '1rem',
-            paddingTop: '1rem',
-          }}
-                    />
-          <div>
-            <div style={{ fontWeight: 'bold' }}>{x.case_id}</div>
-            <div style={{ fontSize: '80%' }}>{x.submitter_id}</div>
-            {x.project.project_id}
-          </div>
-        </Row>
-      )}
-      fieldNoDoctype="case_id"
-      placeholder="e.g. TCGA-A5-A0G2, 432fe4a9-2..."
-      queryType="case"
-      title="Case"
-      />
-    <UploadSetButton
-      defaultQuery={{
-        pathname: '/repository',
-        query: { searchTableTab: 'cases' },
-      }}
-      idField="cases.case_id"
-      style={{
-        width: '100%',
-        borderBottom: `1px solid ${props.theme.greyScale5}`,
-        padding: '0 1.2rem 1rem',
-      }}
-      type="case"
-      UploadModal={UploadCaseSet}
-      >
-      Upload Case Set
-    </UploadSetButton>
-
+    { features.searchByCaseId &&
+	    <FacetHeader
+	      collapsed={props.caseIdCollapsed}
+	      description="Enter UUID or ID of Case, Sample, Portion, Slide, Analyte or Aliquot"
+	      field="cases.case_id"
+	      setCollapsed={props.setCaseIdCollapsed}
+	      title="Case"
+	      />
+    }
+    { features.searchByCaseId &&
+	    <SuggestionFacet
+	      collapsed={props.caseIdCollapsed}
+	      doctype="cases"
+	      dropdownItem={x => (
+	        <Row>
+	          <CaseIcon style={{
+	            paddingRight: '1rem',
+	            paddingTop: '1rem',
+	          }}
+	                    />
+	          <div>
+	            <div style={{ fontWeight: 'bold' }}>{x.case_id}</div>
+	            <div style={{ fontSize: '80%' }}>{x.submitter_id}</div>
+	            {x.project.project_id}
+	          </div>
+	        </Row>
+	      )}
+	      fieldNoDoctype="case_id"
+	      placeholder="e.g. TCGA-A5-A0G2, 432fe4a9-2..."
+	      queryType="case"
+	      title="Case"
+	      />
+    }
+    { features.uploadCaseSet &&
+	    <UploadSetButton
+	      defaultQuery={{
+	        pathname: '/repository',
+	        query: { searchTableTab: 'cases' },
+	      }}
+	      idField="cases.case_id"
+	      style={{
+	        width: '100%',
+	        borderBottom: `1px solid ${props.theme.greyScale5}`,
+	        padding: '0 1.2rem 1rem',
+	      }}
+	      type="case"
+	      UploadModal={UploadCaseSet}
+	      >
+	      Upload Case Set
+	    </UploadSetButton>
+    }
     {_.reject(presetFacets, { full: 'cases.case_id' }).map(facet => (
       <FacetWrapper
         additionalProps={facet.additionalProps}
         aggregation={
-          props.viewer.repository.cases.aggregations[
+          props.viewer.File.aggregations[
             escapeForRelay(facet.field)
         ]
         }
@@ -297,6 +257,7 @@ const CaseAggregationsComponent = (props: TProps) => (
         />
     ))}
   </div>
+
 );
 
 export default enhance(CaseAggregationsComponent);

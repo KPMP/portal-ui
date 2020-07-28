@@ -75,6 +75,12 @@ export default (Component: ReactClass<*>) =>
                         key
                       }
                     }
+                    workflow_type {
+                      buckets {
+                        doc_count
+                        key
+                      }
+                    }                    
                     data_format {
                       buckets {
                         doc_count
@@ -82,12 +88,6 @@ export default (Component: ReactClass<*>) =>
                       }
                     }
                     access {
-                      buckets {
-                        doc_count
-                        key
-                      }
-                    }
-                    sample_id {
                       buckets {
                         doc_count
                         key
